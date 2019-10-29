@@ -1,15 +1,5 @@
 # Buscador de Imágenes
 
-## Introducción
-
-Este repositorio contiene el código de una aplicación `elixir/otp`, que permite extraer de un archivo de texto plano links a imágenes (en formato `png`, `jpg` o `gif`), y descargarlas en un directorio. 
-
-Para ello, se expone un módulo `ImageFinder` y una función `fetch`, que toma la ruta del archivo de links y el directorio en el cual se descargarán. Ambas rutas pueden ser relativas al proyecto o absolutas. Por ejemplo: 
-
-```elixir
-ImageFinder.fetch "sample.txt.gz", "out"
-:ok
-```
 
 ### Instalacion
 
@@ -24,6 +14,16 @@ Que pasa si recibo un error como el siguiente?
 
 Vamos a tener que ejecutar el siguiente comando -> `mix local.hex` y despues ejecutar el primer comando.
 
+## Introducción
+
+Este repositorio contiene el código de una aplicación `elixir/otp`, que permite extraer de un archivo de texto plano links a imágenes (en formato `png`, `jpg` o `gif`), y descargarlas en un directorio. 
+
+Para ello, se expone un módulo `ImageFinder` y una función `fetch`, que toma la ruta del archivo de links y el directorio en el cual se descargarán. Ambas rutas pueden ser relativas al proyecto o absolutas. Por ejemplo: 
+
+```elixir
+ImageFinder.fetch "sample.txt.gz", "out"
+:ok
+```
 
 ## El ejercicio
 
