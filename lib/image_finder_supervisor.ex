@@ -2,12 +2,15 @@ defmodule ImageFinder.Supervisor do
   use Supervisor
 
   def start_link do
-    Supervisor.start_link(__MODULE__, :ok)
+  	options = [ strategy: :one_for_one, name: ImageFinder.Supervisor ]
+    Supervisor.start_link(children(), options)
   end
 
   def init(:ok) do
-    children = [worker(ImageFinder.Worker, [ImageFinder.Worker])]
+  	[]
+  end
 
-    supervise(children, strategy: :one_for_one)
+  def children() do
+	[ ImageFinder.Worker, ImageDownloader.Supervisor, DomainDownloader ]
   end
 end

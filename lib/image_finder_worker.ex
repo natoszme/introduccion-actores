@@ -1,32 +1,24 @@
 defmodule ImageFinder.Worker do
-  use GenServer
+  use GenServer, restart: :transient
 
-  def start_link(name) do
-    GenServer.start_link(__MODULE__, :ok, name: name)
+  def start_link(_opts) do
+    GenServer.start_link(__MODULE__, :ok, name: ImageFinder.Worker)
   end
 
   def init(:ok) do
+    IO.puts "starting worker"
     {:ok, %{}}
   end
 
-  def handle_call({:fetch, source_file, target_directory}, _from, state) do
-    content = File.read! source_file
-    regexp = ~r/http(s?)\:.*?\.(png|jpg|gif)/
-    Regex.scan(regexp, content)
-      |> Enum.map(&List.first/1)
-      |> Enum.map(&(fetch_link &1, target_directory))
-    {:reply, :ok, state}
+  def handle_cast({:fetch, source_file, target_directory}, state) do
+    File.stream!(source_file)
+      |> Stream.map(&handle_line(&1, target_directory))
+      |> Stream.run
+
+    {:noreply, state}
   end
 
-  def fetch_link(link, target_directory) do
-    HTTPotion.get(link).body  |> save(target_directory)
-  end
-
-  def digest(body) do
-    :crypto.hash(:md5 , body) |> Base.encode16()
-  end
-
-  def save(body, directory) do
-    File.write! "#{directory}/#{digest(body)}", body
+  def handle_line(line, target_directory) do
+    LineHandler.parse_and_download(line, target_directory)
   end
 end
